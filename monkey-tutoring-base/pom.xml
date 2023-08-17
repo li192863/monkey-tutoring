@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>com.chestnut</groupId>
-        <artifactId>mokey-tutoring-parent</artifactId>
+        <artifactId>monkey-tutoring-parent</artifactId>
         <version>1.0.0</version>
-        <relativePath>../mokey-tutoring-parent</relativePath>
+        <relativePath>../monkey-tutoring-parent</relativePath>
     </parent>
 
-    <artifactId>mokey-tutoring-base</artifactId>
+    <artifactId>monkey-tutoring-base</artifactId>
     <version>1.0.0</version>
 
     <properties>
