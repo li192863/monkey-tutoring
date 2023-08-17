@@ -28,9 +28,8 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
     public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto dto) {
         LambdaQueryWrapper<CourseBase> lqw = new LambdaQueryWrapper<>();
         lqw.like(StringUtils.isNotEmpty(dto.getCourseName()), CourseBase::getName, dto.getCourseName());
-        lqw.eq(StringUtils.isNotEmpty(dto.getAuditStatus()), CourseBase::getAuditStatus, dto.getAuditStatus());
-        lqw.like(StringUtils.isNotEmpty(dto.getCourseName()),CourseBase::getName,dto.getCourseName());
         lqw.eq(StringUtils.isNotEmpty(dto.getAuditStatus()),CourseBase::getAuditStatus,dto.getAuditStatus());
+        lqw.eq(StringUtils.isNotEmpty(dto.getPublishStatus()), CourseBase::getStatus, dto.getPublishStatus());
         // 分页查询
         Page<CourseBase> page = new Page<>(pageParams.getPageNo(), pageParams.getPageSize());
         Page<CourseBase> pageResult = baseMapper.selectPage(page, lqw);

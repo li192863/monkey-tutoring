@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>monkey-tutoring-content</artifactId>
+        <artifactId>monkey-tutoring-system</artifactId>
         <groupId>com.chestnut</groupId>
         <version>1.0.0</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>monkey-tutoring-content-model</artifactId>
-
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+    <artifactId>monkey-tutoring-system-model</artifactId>
+    <name>monkey-tutoring-system-model</name>
+    <description>monkey-tutoring-system-model</description>
 
     <dependencies>
         <dependency>
@@ -21,6 +17,7 @@
             <artifactId>monkey-tutoring-base</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <!--存在mybatisplus注解添加相关注解保证不报错-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-annotation</artifactId>
@@ -34,6 +31,5 @@
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
-
 
 </project>
