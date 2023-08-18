@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api(value = "课程分类管理接口", tags = "课程分类管理接口")
+@Api(value = "课程分类管理", tags = "课程分类管理")
 @RestController
 public class CourseCategoryController {
     @Autowired
     private CourseCategoryService courseCategoryService;
 
-    @ApiOperation("课程分类查询接口")
+    @ApiOperation("课程分类查询")
     @GetMapping("/course-category/tree-nodes")
     public List<CourseCategoryTreeDto> getTreeNodes() {
         return courseCategoryService.getTreeNodes("1");

@@ -15,13 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Api(value = "课程信息管理接口", tags = "课程信息管理接口")
+@Api(value = "课程信息管理", tags = "课程信息管理")
 @RestController
 public class CourseBaseController {
     @Autowired
     private CourseBaseService courseBaseService;
 
-    @ApiOperation("课程查询接口")
+    @ApiOperation("课程查询")
     @PostMapping("/course/list")
     public PageResult<CourseBase> page(PageParams pageParams, @RequestBody(required = false) QueryCourseParamsDto queryCourseParams) {
         return courseBaseService.page(pageParams, queryCourseParams);
