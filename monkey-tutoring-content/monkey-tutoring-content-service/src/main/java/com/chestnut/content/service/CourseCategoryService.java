@@ -1,7 +1,10 @@
 package com.chestnut.content.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.chestnut.content.model.dto.CourseCategoryTreeDto;
 import com.chestnut.content.model.po.CourseCategory;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.chestnut.content.model.po.CourseCategory;
  */
 public interface CourseCategoryService extends IService<CourseCategory> {
 
+    /**
+     * 查询分类
+     * @param id
+     * @return
+     */
+    List<CourseCategoryTreeDto> getTreeNodes(String id);
 }

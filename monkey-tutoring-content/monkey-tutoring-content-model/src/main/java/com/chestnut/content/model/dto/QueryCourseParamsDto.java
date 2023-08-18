@@ -3,12 +3,6 @@ package com.chestnut.content.model.dto;
 import lombok.Data;
 import lombok.ToString;
 
-/**
- * 课程查询参数Dto
- *
- * @author: Chestnut
- * @since: 2023-08-16
- **/
 @Data
 @ToString
 public class QueryCourseParamsDto {
