@@ -21,5 +21,5 @@ public interface CourseCategoryService extends IService<CourseCategory> {
      * @param id
      * @return
      */
-    List<CourseCategoryTreeDto> getTreeNodes(String id);
+    List<CourseCategoryTreeDto> getCategoryTreeNodes(String id);
 }

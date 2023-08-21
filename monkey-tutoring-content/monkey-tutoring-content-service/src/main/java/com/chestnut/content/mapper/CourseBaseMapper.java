@@ -11,5 +11,4 @@ import com.chestnut.content.model.po.CourseBase;
  * @author Chestnut
  */
 public interface CourseBaseMapper extends BaseMapper<CourseBase> {
-
 }

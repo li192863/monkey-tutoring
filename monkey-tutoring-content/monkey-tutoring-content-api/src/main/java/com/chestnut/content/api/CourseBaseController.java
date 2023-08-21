@@ -23,7 +23,7 @@ public class CourseBaseController {
 
     @ApiOperation("课程查询")
     @PostMapping("/course/list")
-    public PageResult<CourseBase> page(PageParams pageParams, @RequestBody(required = false) QueryCourseParamsDto queryCourseParams) {
+    public PageResult<CourseDto> page(PageParams pageParams, @RequestBody(required = false) QueryCourseParamsDto queryCourseParams) {
         return courseBaseService.page(pageParams, queryCourseParams);
     }
 

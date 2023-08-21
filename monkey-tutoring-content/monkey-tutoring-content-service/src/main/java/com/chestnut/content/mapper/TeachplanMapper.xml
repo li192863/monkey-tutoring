@@ -4,27 +4,100 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.chestnut.content.model.po.Teachplan">
-        <id column="id" property="id" />
-        <result column="pname" property="pname" />
-        <result column="parentid" property="parentid" />
-        <result column="grade" property="grade" />
-        <result column="media_type" property="mediaType" />
-        <result column="start_time" property="startTime" />
-        <result column="end_time" property="endTime" />
-        <result column="description" property="description" />
-        <result column="timelength" property="timelength" />
-        <result column="orderby" property="orderby" />
-        <result column="course_id" property="courseId" />
-        <result column="course_pub_id" property="coursePubId" />
-        <result column="status" property="status" />
-        <result column="is_preview" property="isPreview" />
-        <result column="create_date" property="createDate" />
-        <result column="change_date" property="changeDate" />
+        <id column="id" property="id"/>
+        <result column="pname" property="pname"/>
+        <result column="parentid" property="parentid"/>
+        <result column="grade" property="grade"/>
+        <result column="media_type" property="mediaType"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="description" property="description"/>
+        <result column="timelength" property="timelength"/>
+        <result column="orderby" property="orderby"/>
+        <result column="course_id" property="courseId"/>
+        <result column="course_pub_id" property="coursePubId"/>
+        <result column="status" property="status"/>
+        <result column="is_preview" property="isPreview"/>
+        <result column="create_date" property="createDate"/>
+        <result column="change_date" property="changeDate"/>
     </resultMap>
+
+    <!-- 树形结构 -->
+    <resultMap id="teachplanDtoResultMap" type="com.chestnut.content.model.dto.TeachplanDto">
+        <!-- 基本信息 -->
+        <id column="t1_id" property="id"/>
+        <result column="t1_pname" property="pname"/>
+        <result column="t1_parentid" property="parentid"/>
+        <result column="t1_grade" property="grade"/>
+        <result column="t1_mediaType" property="mediaType"/>
+        <result column="t1_stratTime" property="startTime"/>
+        <result column="t1_endTime" property="endTime"/>
+        <result column="t1_orderby" property="orderby"/>
+        <result column="t1_courseId" property="courseId"/>
+        <result column="t1_coursePubId" property="coursePubId"/>
+        <!-- 子节点（一对多） -->
+        <collection property="teachPlanTreeNodes" ofType="com.chestnut.content.model.dto.TeachplanDto">
+            <id column="t2_id" property="id"/>
+            <result column="t2_pname" property="pname"/>
+            <result column="t2_parentid" property="parentid"/>
+            <result column="t2_grade" property="grade"/>
+            <result column="t2_mediaType" property="mediaType"/>
+            <result column="t2_stratTime" property="startTime"/>
+            <result column="t2_endTime" property="endTime"/>
+            <result column="t2_orderby" property="orderby"/>
+            <result column="t2_courseId" property="courseId"/>
+            <result column="t2_coursePubId" property="coursePubId"/>
+            <!-- 媒资信息（一对一） -->
+            <association property="teachplanMedia" javaType="com.chestnut.content.model.po.TeachplanMedia">
+                <result column="m1_teachplanMeidaId" property="id"/>
+                <result column="m1_mediaFilename" property="mediaFilename"/>
+                <result column="m1_mediaId" property="mediaId"/>
+                <result column="t2_id" property="teachplanId"/>
+                <result column="t2_courseId" property="courseId"/>
+                <result column="t2_coursePubId" property="coursePubId"/>
+            </association>
+        </collection>
+    </resultMap>
+
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, pname, parentid, grade, media_type, start_time, end_time, description, timelength, orderby, course_id, course_pub_id, status, is_preview, create_date, change_date
+        id
+        , pname, parentid, grade, media_type, start_time, end_time, description, timelength, orderby, course_id, course_pub_id, status, is_preview, create_date, change_date
     </sql>
+
+    <select id="selectTreeNodes" parameterType="Long" resultMap="teachplanDtoResultMap">
+        SELECT t1.id             t1_id,
+               t1.pname          t1_pname,
+               t1.parentid       t1_parentid,
+               t1.grade          t1_grade,
+               t1.media_type     t1_mediaType,
+               t1.start_time     t1_stratTime,
+               t1.end_time       t1_endTime,
+               t1.orderby        t1_orderby,
+               t1.course_id      t1_courseId,
+               t1.course_pub_id  t1_coursePubId,
+               t2.id             t2_id,
+               t2.pname          t2_pname,
+               t2.parentid       t2_parentid,
+               t2.grade          t2_grade,
+               t2.media_type     t2_mediaType,
+               t2.start_time     t2_stratTime,
+               t2.end_time       t2_endTime,
+               t2.orderby        t2_orderby,
+               t2.course_id      t2_courseId,
+               t2.course_pub_id  t2_coursePubId,
+               m1.media_fileName m1_mediaFilename,
+               m1.id             m1_teachplanMeidaId,
+               m1.media_id       m1_mediaId
+        FROM teachplan t1
+                 LEFT JOIN teachplan t2 ON t1.id = t2.parentid
+                 LEFT JOIN teachplan_media m1 ON m1.teachplan_id = t2.id
+        WHERE t1.parentid = 0
+          AND t1.course_id = #{value}
+
+        ORDER BY t1.orderby,
+                 t2.orderby
+    </select>
 
 </mapper>

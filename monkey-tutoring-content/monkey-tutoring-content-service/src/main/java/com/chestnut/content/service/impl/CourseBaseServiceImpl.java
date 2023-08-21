@@ -20,10 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -48,15 +51,32 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
      * @param pageParams
      * @param dto
      */
-    public PageResult<CourseBase> page(PageParams pageParams, QueryCourseParamsDto dto) {
-        LambdaQueryWrapper<CourseBase> lqw = new LambdaQueryWrapper<>();
-        lqw.like(StringUtils.isNotEmpty(dto.getCourseName()), CourseBase::getName, dto.getCourseName());
-        lqw.eq(StringUtils.isNotEmpty(dto.getAuditStatus()), CourseBase::getAuditStatus, dto.getAuditStatus());
-        lqw.eq(StringUtils.isNotEmpty(dto.getPublishStatus()), CourseBase::getStatus, dto.getPublishStatus());
+    public PageResult<CourseDto> page(PageParams pageParams, QueryCourseParamsDto dto) {
+        LambdaQueryWrapper<CourseBase> courseBaseLqw = new LambdaQueryWrapper<>();
+        courseBaseLqw.like(StringUtils.isNotEmpty(dto.getCourseName()), CourseBase::getName, dto.getCourseName());
+        courseBaseLqw.eq(StringUtils.isNotEmpty(dto.getAuditStatus()), CourseBase::getAuditStatus, dto.getAuditStatus());
+        courseBaseLqw.eq(StringUtils.isNotEmpty(dto.getPublishStatus()), CourseBase::getStatus, dto.getPublishStatus());
+
         // 分页查询
         Page<CourseBase> page = new Page<>(pageParams.getPageNo(), pageParams.getPageSize());
-        Page<CourseBase> pageResult = baseMapper.selectPage(page, lqw);
-        List<CourseBase> records = pageResult.getRecords();
+        Page<CourseBase> pageResult = baseMapper.selectPage(page, courseBaseLqw);
+        // 组装结果
+        Page<CourseDto> res = new Page<>();
+        List<CourseDto> records = pageResult.getRecords().stream().map(item -> {
+            CourseDto course = new CourseDto();
+            BeanUtils.copyProperties(item, course);
+            LambdaQueryWrapper<CourseMarket> courseMarketLqw = new LambdaQueryWrapper<>();
+            courseMarketLqw.eq(CourseMarket::getId, item.getId());
+            CourseMarket courseMarket = courseMarketMapper.selectOne(courseMarketLqw);
+            if (courseMarket == null) {
+                course.setCharge("201000");
+            } else {
+                course.setCharge("201001");
+            }
+            return course;
+        }).collect(Collectors.toList());
+        res.setRecords(records);
+        // 组装结果
         long total = pageResult.getTotal();
         return new PageResult<>(records, total, pageParams.getPageNo(), pageParams.getPageSize());
     }

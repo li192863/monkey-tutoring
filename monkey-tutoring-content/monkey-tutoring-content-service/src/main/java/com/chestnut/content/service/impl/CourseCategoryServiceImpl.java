@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 public class CourseCategoryServiceImpl extends ServiceImpl<CourseCategoryMapper, CourseCategory> implements CourseCategoryService {
     @Override
-    public List<CourseCategoryTreeDto> getTreeNodes(String id) {
+    public List<CourseCategoryTreeDto> getCategoryTreeNodes(String id) {
         // 递归查询
         List<CourseCategoryTreeDto> courseCategoryTreeDtos = this.baseMapper.selectTreeNodes(id);
         // 构建Map

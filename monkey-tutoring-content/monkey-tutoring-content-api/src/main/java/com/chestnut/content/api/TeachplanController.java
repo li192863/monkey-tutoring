@@ -1,13 +1,13 @@
 package com.chestnut.content.api;
 
+import com.chestnut.content.model.dto.AddTeachplanDto;
 import com.chestnut.content.model.dto.TeachplanDto;
 import com.chestnut.content.service.TeachplanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,7 +27,14 @@ public class TeachplanController {
 
     @ApiOperation("教学计划查询")
     @GetMapping("/teachplan/{courseId}/tree-nodes")
-    public List<TeachplanDto> getTreeNodes(@PathVariable Long courseId) {
-        return null;
+    public List<TeachplanDto> getTeachplanTreeNodes(@PathVariable Long courseId) {
+        return teachplanService.getTeachplanTreeNodes(courseId);
     }
+
+    @ApiOperation("课程计划创建或修改")
+    @PostMapping("/teachplan")
+    public void save(@RequestBody @Validated AddTeachplanDto teachplan){
+        teachplanService.saveTeachplan(teachplan);
+    }
+
 }
